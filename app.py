@@ -6,7 +6,7 @@ from flask_wtf import CSRFProtect
 csrf = CSRFProtect()
 
 #created database object globally
-# You are creating a database object. But right now → it is empty, not connected to any Flask app.
+# You are creating a database object.right now → it is empty, not connected to any Flask app.
 db = SQLAlchemy()
 
 
