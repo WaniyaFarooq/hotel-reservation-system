@@ -28,11 +28,11 @@ def create_app():
         return User.query.get(int(user_id))
 
     # Register blueprints
-    from app.routes.auth import auth_bp
-    from app.routes.admin import admin_bp
-    from app.routes.booking import booking_bp
-    from app.routes.customer import customer_bp
-    from app.routes.room import rooms_bp
+    from .routes.auth import auth_bp
+    from .routes.admin import admin_bp
+    from .routes.booking import booking_bp
+    from .routes.customer import customer_bp
+    from .routes.rooms import rooms_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
