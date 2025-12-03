@@ -1,43 +1,45 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
+from flask_login import LoginManager
+from app.models import User
+from app.extensions import db, csrf
 
 
-csrf = CSRFProtect()
-
-#created database object globally
-# You are creating a database object.right now → it is empty, not connected to any Flask app.
-db = SQLAlchemy()
 
 
-# You are creating a function that will build and return the Flask app object.
 def create_app():
-    app = Flask(__name__) # flask app k instance
-    # A secret key used by Flask to:protect sessions,protect cookies,protect CSRF tokens (forms protection)
+    app = Flask(__name__)
+
     app.config['SECRET_KEY'] = 'waniya-key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hotel.db'
-    # Use SQLite database named todo.db and store it in project folder.
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    
-    # to connect db to app
-    # db.__init__(app)
+
+    # Initialize extensions
     db.init_app(app)
     csrf.init_app(app)
-    
+
+    login = LoginManager()
+    login.init_app(app)
+    login.login_view = "login"
+
+    @login.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
+    # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.admin import admin_bp
     from app.routes.booking import booking_bp
     from app.routes.customer import customer_bp
     from app.routes.room import rooms_bp
-    
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(booking_bp)
     app.register_blueprint(customer_bp)
     app.register_blueprint(rooms_bp)
-    # Add all task/auth routes to my main Flask application
-    # mini app ki tarah related routes 
-   
-    return app
-    
 
+
+
+    return app
