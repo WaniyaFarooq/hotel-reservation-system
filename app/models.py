@@ -1,12 +1,12 @@
 from app.extensions import db
 from datetime import datetime
-
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
-
+# ==========================================================
+# USER TABLE
+# ==========================================================
 class User(db.Model, UserMixin):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
@@ -30,8 +30,9 @@ class Branch(db.Model):
     branch_name = db.Column(db.String(120), nullable=False)
     city = db.Column(db.String(120), nullable=False)
     managerID = db.Column(db.Integer, db.ForeignKey("employees.empID"))
-    # Relationships
-    employees = db.relationship("Employees", backref="branch", lazy=True)  
+
+    # Specify foreign_keys to avoid ambiguity
+    employees = db.relationship("Employees", backref="branch", lazy=True, foreign_keys="Employees.branchID")
     rooms = db.relationship("Room", backref="branch", lazy=True)
     customers = db.relationship("Customer", backref="branch", lazy=True)
 
@@ -50,42 +51,39 @@ class Employees(db.Model):
     phone_no = db.Column(db.String(50))
     email = db.Column(db.String(120), unique=True)
     designation = db.Column(db.String(120))
-    supervisorID = db.Column(db.Integer, db.ForeignKey("employees.empID"))
     joining_date = db.Column(db.Date)
     address = db.Column(db.String(255))
     branchID = db.Column(db.Integer, db.ForeignKey("branch.branchID"))
 
-    # Self-reference for hierarchy
-    supervisor = db.relationship("Employees", remote_side=[empID])
+    
 
     # Admin login relationship
-    admin_login = db.relationship("AdminLogin", backref="employee", uselist=False)
+    admin_login = db.relationship("Admin", backref="employee", uselist=False)
 
     def __repr__(self):
         return f"<Employee {self.name}>"
 
+class Admin(db.Model):
+    __tablename__ = "admin_login"
+
+    userID = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    empID = db.Column(db.Integer, db.ForeignKey("employees.empID"), nullable=False)
+    username = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(200), nullable=False)
+
+    def set_password(self, pwd):
+        self.password_hash = generate_password_hash(pwd)
+
+    def check_password(self, pwd):
+        return check_password_hash(self.password_hash, pwd)
 
 # ==========================================================
 # ADMIN LOGIN TABLE
 # ==========================================================
-class AdminLogin(db.Model):
-    __tablename__ = "admin_login"
-
-    userID = db.Column(db.Integer, primary_key=True)
-    empID = db.Column(db.Integer, db.ForeignKey("employees.empID"), nullable=False)
-    username = db.Column(db.String(120), unique=True, nullable=False)
-    pwd = db.Column(db.String(120), nullable=False)
-
-    def __repr__(self):
-        return f"<AdminLogin {self.username}>"
 
 
-# ==========================================================
-# CUSTOMER TABLE
-# ==========================================================
 class Customer(db.Model):
     __tablename__ = "customer"
-
     customerID = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     cnic = db.Column(db.String(50))
@@ -94,19 +92,17 @@ class Customer(db.Model):
     gender = db.Column(db.String(10))
     branchID = db.Column(db.Integer, db.ForeignKey("branch.branchID"))
 
-    # Relationships
-    login = db.relationship("CustomerLogin", backref="customer", uselist=False)
+    login = db.relationship(
+        "CustomerLogin",
+        backref="customer",
+        uselist=False,
+        foreign_keys="[CustomerLogin.customerID]"
+    )
     room_details = db.relationship("RoomDetail", backref="customer", lazy=True)
     bookings = db.relationship("Booking", backref="customer", lazy=True)
     payments = db.relationship("Payment", backref="customer", lazy=True)
 
-    def __repr__(self):
-        return f"<Customer {self.name}>"
 
-
-# ==========================================================
-# CUSTOMER LOGIN TABLE
-# ==========================================================
 class CustomerLogin(db.Model):
     __tablename__ = "customer_login"
 
@@ -114,9 +110,6 @@ class CustomerLogin(db.Model):
     customerID = db.Column(db.Integer, db.ForeignKey("customer.customerID"))
     customer_name = db.Column(db.String(120))
     pwd = db.Column(db.String(120))
-
-    def __repr__(self):
-        return f"<CustomerLogin {self.email}>"
 
 
 # ==========================================================
@@ -142,12 +135,11 @@ class Room(db.Model):
     __tablename__ = "room"
 
     roomID = db.Column(db.Integer, primary_key=True)
-    status = db.Column(db.String(20))   # Available / Booked / Out of service
+    status = db.Column(db.String(20))
     type = db.Column(db.String(120))
     price = db.Column(db.Float)
     branchID = db.Column(db.Integer, db.ForeignKey("branch.branchID"))
 
-    # Relationship to room details
     room_details = db.relationship("RoomDetail", backref="room", lazy=True)
 
     def __repr__(self):
@@ -156,7 +148,6 @@ class Room(db.Model):
 
 # ==========================================================
 # ROOM DETAIL TABLE
-# Each booking gets a detailed room usage record
 # ==========================================================
 class RoomDetail(db.Model):
     __tablename__ = "room_detail"
@@ -166,7 +157,6 @@ class RoomDetail(db.Model):
     bookingID = db.Column(db.Integer, db.ForeignKey("booking.bookID"))
     customerID = db.Column(db.Integer, db.ForeignKey("customer.customerID"))
 
-    # Service Details relationship
     services_detail = db.relationship("ServicesDetail", backref="room_detail", lazy=True)
 
     def __repr__(self):
@@ -175,8 +165,7 @@ class RoomDetail(db.Model):
 
 # ==========================================================
 # SERVICES DETAIL TABLE
-# ==============================================================
-
+# ==========================================================
 class ServicesDetail(db.Model):
     __tablename__ = "services_detail"
 
@@ -186,7 +175,6 @@ class ServicesDetail(db.Model):
     quantity = db.Column(db.Integer)
     total_price = db.Column(db.Float)
 
-    # Payments relationship
     payments = db.relationship("Payment", backref="services_detail", lazy=True)
 
     def __repr__(self):
@@ -205,7 +193,7 @@ class Booking(db.Model):
     checkOut = db.Column(db.Date)
     no_of_guests = db.Column(db.Integer)
     booking_date = db.Column(db.Date, default=datetime.utcnow)
-    status = db.Column(db.String(20))  # confirmed / cancelled / completed
+    status = db.Column(db.String(20))
 
     payments = db.relationship("Payment", backref="booking", lazy=True)
 

@@ -1,0 +1,32 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Hotel Management System{% endblock %}</title>
+<!-- In base.html or admin_register.html -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+</head>
+<body>
+<header class="navbar">
+<div class="logo">HotelEase</div>
+<nav>
+<a href="index.html">Home</a>
+<a href="rooms.html">Rooms</a>
+<a href="booking.html">Booking</a>
+<a href="contact.html">Contact</a>
+</nav>
+</header>
+
+
+<main>
+{% block content %}{% endblock %}
+</main>
+
+
+<footer class="footer">© 2025 HotelEase. All Rights Reserved.</footer>
+</body>
+</html>
