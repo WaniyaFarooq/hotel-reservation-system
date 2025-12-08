@@ -35,13 +35,13 @@ def create_app():
     from .routes.auth import auth_bp
     # from .routes.admin import admin_bp
     # from .routes.booking import booking_bp
-    # from .routes.customer import customer_bp
+    from .routes.customer import customer_bp
     # from .routes.rooms import rooms_bp
 
     app.register_blueprint(auth_bp)
     # app.register_blueprint(admin_bp)
     # app.register_blueprint(booking_bp)
-    # app.register_blueprint(customer_bp)
+    app.register_blueprint(customer_bp)
     # app.register_blueprint(rooms_bp)
 
 

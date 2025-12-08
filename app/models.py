@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 # ==========================================================
 # USER TABLE
 # ==========================================================
@@ -31,10 +32,8 @@ class Branch(db.Model):
     city = db.Column(db.String(120), nullable=False)
     managerID = db.Column(db.Integer, db.ForeignKey("employees.empID"))
 
-    # Specify foreign_keys to avoid ambiguity
     employees = db.relationship("Employees", backref="branch", lazy=True, foreign_keys="Employees.branchID")
     rooms = db.relationship("Room", backref="branch", lazy=True)
-    customers = db.relationship("Customer", backref="branch", lazy=True)
 
     def __repr__(self):
         return f"<Branch {self.branch_name} - {self.city}>"
@@ -55,14 +54,15 @@ class Employees(db.Model):
     address = db.Column(db.String(255))
     branchID = db.Column(db.Integer, db.ForeignKey("branch.branchID"))
 
-    
-
-    # Admin login relationship
     admin_login = db.relationship("Admin", backref="employee", uselist=False)
 
     def __repr__(self):
         return f"<Employee {self.name}>"
 
+
+# ==========================================================
+# ADMIN LOGIN TABLE
+# ==========================================================
 class Admin(db.Model):
     __tablename__ = "admin_login"
 
@@ -77,39 +77,23 @@ class Admin(db.Model):
     def check_password(self, pwd):
         return check_password_hash(self.password_hash, pwd)
 
+
 # ==========================================================
-# ADMIN LOGIN TABLE
+# CUSTOMER LOGIN ONLY (no Customer table)
 # ==========================================================
-
-
-class Customer(db.Model):
-    __tablename__ = "customer"
-    customerID = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    cnic = db.Column(db.String(50))
-    contact_no = db.Column(db.String(50))
-    email = db.Column(db.String(120), unique=True)
-    gender = db.Column(db.String(10))
-    branchID = db.Column(db.Integer, db.ForeignKey("branch.branchID"))
-
-    login = db.relationship(
-        "CustomerLogin",
-        backref="customer",
-        uselist=False,
-        foreign_keys="[CustomerLogin.customerID]"
-    )
-    room_details = db.relationship("RoomDetail", backref="customer", lazy=True)
-    bookings = db.relationship("Booking", backref="customer", lazy=True)
-    payments = db.relationship("Payment", backref="customer", lazy=True)
-
-
 class CustomerLogin(db.Model):
     __tablename__ = "customer_login"
 
-    email = db.Column(db.String(120), db.ForeignKey("customer.email"), primary_key=True)
-    customerID = db.Column(db.Integer, db.ForeignKey("customer.customerID"))
-    customer_name = db.Column(db.String(120))
-    pwd = db.Column(db.String(120))
+    customerID = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    customer_name = db.Column(db.String(120), nullable=False)
+    password_hash = db.Column(db.String(255), nullable=False)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
 
 # ==========================================================
@@ -155,7 +139,7 @@ class RoomDetail(db.Model):
     roomDetailID = db.Column(db.Integer, primary_key=True)
     roomID = db.Column(db.Integer, db.ForeignKey("room.roomID"))
     bookingID = db.Column(db.Integer, db.ForeignKey("booking.bookID"))
-    customerID = db.Column(db.Integer, db.ForeignKey("customer.customerID"))
+    customerID = db.Column(db.Integer, db.ForeignKey("customer_login.customerID"))
 
     services_detail = db.relationship("ServicesDetail", backref="room_detail", lazy=True)
 
@@ -188,7 +172,7 @@ class Booking(db.Model):
     __tablename__ = "booking"
 
     bookID = db.Column(db.Integer, primary_key=True)
-    customerID = db.Column(db.Integer, db.ForeignKey("customer.customerID"))
+    customerID = db.Column(db.Integer, db.ForeignKey("customer_login.customerID"))
     checkIn = db.Column(db.Date)
     checkOut = db.Column(db.Date)
     no_of_guests = db.Column(db.Integer)
@@ -208,7 +192,7 @@ class Payment(db.Model):
     __tablename__ = "payment"
 
     paymentID = db.Column(db.Integer, primary_key=True)
-    customerID = db.Column(db.Integer, db.ForeignKey("customer.customerID"))
+    customerID = db.Column(db.Integer, db.ForeignKey("customer_login.customerID"))
     bookingID = db.Column(db.Integer, db.ForeignKey("booking.bookID"))
     servicesDetailID = db.Column(db.Integer, db.ForeignKey("services_detail.servicesDetailID"))
     total_amount = db.Column(db.Float)

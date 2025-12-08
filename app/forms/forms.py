@@ -25,3 +25,19 @@ class EmployeeRegistrationForm(FlaskForm):
     username = StringField("Username", validators=[DataRequired(), Length(min=3, max=50)])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=6)])
     submit = SubmitField("Register")
+    
+class CustomerLoginForm(FlaskForm):
+    
+    email = StringField("email", validators=[
+        DataRequired(), Email(), Length(max=120)
+    ])
+    password = PasswordField("Password", validators=[
+        DataRequired()
+    ])
+    submit = SubmitField("Login")
+    
+class CustomerRegistrationForm(FlaskForm):
+    name = StringField("Full Name", validators=[DataRequired(), Length(min=2, max=120)])
+    email = StringField("Email", validators=[DataRequired(), Email(), Length(max=120)])
+    password = PasswordField("Password", validators=[DataRequired(), Length(min=6)])
+    submit = SubmitField("Register")
