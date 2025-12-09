@@ -142,6 +142,18 @@ class Room(db.Model):
 
     room_details = db.relationship("RoomDetail", backref="room", lazy=True)
 
+    @property
+    def id(self):
+        return self.roomID
+    
+    @property
+    def number(self):
+        return self.roomID
+    
+    @property
+    def available(self):
+        return self.status == "available"
+
     def __repr__(self):
         return f"<Room {self.roomID}>"
 

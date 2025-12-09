@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Customer Details - Admin{% endblock %}
+
+{% block content %}
+<div class="register-container">
+  <h2>Customer Details</h2>
+
+  <div style="margin-top:18px; overflow:auto;">
+    <table style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr style="text-align:left; border-bottom:1px solid #ddd;">
+          <th>Name</th><th>Email</th><th>Phone</th><th>Room</th><th>Check-in</th><th>Check-out</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in customers %}
+        <tr style="border-bottom:1px solid #f1f1f1;">
+          <td>{{ c.name }}</td>
+          <td>{{ c.email }}</td>
+          <td>{{ c.phone }}</td>
+          <td>{{ c.room_number or '-' }}</td>
+          <td>{{ c.checkin }}</td>
+          <td>{{ c.checkout }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No customers found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:18px; text-align:center;">
+    <a href="{{ url_for('admin_dashboard') }}" class="btn">Back to Dashboard</a>
+  </div>
+</div>
+{% endblock %}
