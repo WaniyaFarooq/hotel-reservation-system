@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
 from app.extensions import db
-from app.models import Employees, Room, Customer, Booking, Payment, Admin
+from app.models import Employees, Room, CustomerLogin as Customer, Booking, Payment, Admin
 from datetime import datetime, date
 from werkzeug.security import generate_password_hash
 from app.forms.forms import EmployeeRegistrationForm 
@@ -100,13 +100,6 @@ def room_details():
                          available=available,
                          occupied=occupied)
 
-# ============================
-# CUSTOMER DETAILS
-# ============================
-@admin_bp.route("/customers")
-def customer_details():
-    customers = Customer.query.all()
-    return render_template("customer_details.html", customers=customers)
 
 # ============================
 # REVENUE
@@ -118,11 +111,11 @@ def revenue():
     # Calculate totals
     total_revenue = sum([p.total_amount for p in payments if p.total_amount])
     
-    # Today's revenue
+    # Today's revenue - FIXED comparison
     today = date.today()
     today_revenue = sum([
         p.total_amount for p in payments 
-        if p.total_amount and p.payment_date == today
+        if p.total_amount and p.payment_date and p.payment_date == today
     ])
     
     # This month's revenue
@@ -135,6 +128,12 @@ def revenue():
         p.payment_date.year == current_year
     ])
     
+    # Debug print (temporarily)
+    print(f"DEBUG: Total payments: {len(payments)}")
+    print(f"DEBUG: Today's revenue: {today_revenue}")
+    print(f"DEBUG: Month revenue: {month_revenue}")
+    print(f"DEBUG: Total revenue: {total_revenue}")
+    
     return render_template(
         "revenue.html",
         payments=payments,
@@ -142,3 +141,14 @@ def revenue():
         today_revenue=today_revenue or 0,
         month_revenue=month_revenue or 0
     )
+
+@admin_bp.route("/customers")
+def customer_details():
+    customers = Customer.query.all()
+    print(f"🔍 DEBUG: Found {len(customers)} customers")
+    
+        # Debug - print all customers
+    for c in customers:
+        print(f"  - {c.customerID}: {c.customer_name} ({c.email})")
+    
+    return render_template("customer_details.html", customers=customers)

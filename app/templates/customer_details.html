@@ -9,28 +9,29 @@
     <table style="width:100%; border-collapse:collapse;">
       <thead>
         <tr style="text-align:left; border-bottom:1px solid #ddd;">
-          <th>Name</th><th>Email</th><th>Phone</th><th>Room</th><th>Check-in</th><th>Check-out</th>
+          <th>Customer ID</th>
+          <th>Name</th>
+          <th>Email</th>
         </tr>
       </thead>
       <tbody>
-        {% for c in customers %}
+        {% for customer in customers %}
         <tr style="border-bottom:1px solid #f1f1f1;">
-          <td>{{ c.name }}</td>
-          <td>{{ c.email }}</td>
-          <td>{{ c.phone }}</td>
-          <td>{{ c.room_number or '-' }}</td>
-          <td>{{ c.checkin }}</td>
-          <td>{{ c.checkout }}</td>
+          <td>{{ customer.customerID }}</td>
+          <td>{{ customer.customer_name }}</td>
+          <td>{{ customer.email }}</td>
         </tr>
         {% else %}
-        <tr><td colspan="6">No customers found.</td></tr>
+        <tr><td colspan="3" style="text-align:center; padding:20px; color:#666;">
+          No customers found in the database.
+        </td></tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 
   <div style="margin-top:18px; text-align:center;">
-    <a href="{{ url_for('admin_dashboard') }}" class="btn">Back to Dashboard</a>
+    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn">← Back to Dashboard</a>
   </div>
 </div>
 {% endblock %}

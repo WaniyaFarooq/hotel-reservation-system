@@ -1,8 +1,9 @@
 
 from app import create_app
 from app.extensions import db
-from app.models import Employees, Branch, User, Room, Admin
+from app.models import Employees, Branch, User, Room, Admin, Payment, CustomerLogin
 from datetime import date
+from werkzeug.security import generate_password_hash
 
 app = create_app()
 
@@ -171,22 +172,54 @@ with app.app_context():
     print("\n🎉 Database seeding complete!")
 
     # Add to seed.py
-from app.models import Payment
-from datetime import datetime, timedelta
 
-# Add sample payments
-sample_payments = [
-    (1, 1, 1, 5000.0, datetime.now() - timedelta(days=2)),
-    (2, 2, 2, 3000.0, datetime.now() - timedelta(days=1)),
-    (3, 1, 3, 7000.0, datetime.now()),
-]
+    for i in range(1, 6):
+        p = Payment(
+            customerID=1, 
+            bookingID=1, 
+            total_amount=(i * 1000), 
+            payment_date=date.today()
+        )
+        db.session.add(p)
 
-for pid, cid, bid, amount, pdate in sample_payments:
-    payment = Payment(
-        paymentID=pid,
-        customerID=cid,
-        bookingID=bid,
-        total_amount=amount,
-        payment_date=pdate
-    )
-    db.session.add(payment)
+    db.session.commit()
+    print("Payments added for revenue page!")
+
+    # ====================
+    # CUSTOMERS ADD KARO
+    # ====================
+    print("\n👤 Adding customers...")
+    customers = [
+     
+        CustomerLogin(
+            email="fatima.ali@yahoo.com",
+            customer_name="Fatima Ali",
+            password_hash=generate_password_hash("password456")
+        ),
+        CustomerLogin(
+            email="bilal.ahmed@outlook.com",
+            customer_name="Bilal Ahmed",
+            password_hash=generate_password_hash("password789")
+        ),
+        CustomerLogin(
+            email="zainab.khan@gmail.com",
+            customer_name="Zainab Khan",
+            password_hash=generate_password_hash("password101")
+        ),
+        CustomerLogin(
+            email="usman.hassan@hotmail.com",
+            customer_name="Usman Hassan",
+            password_hash=generate_password_hash("password202")
+        )
+    ]
+
+    for customer in customers:
+        existing = CustomerLogin.query.filter_by(email=customer.email).first()
+        if not existing:
+            db.session.add(customer)
+            print(f"  ✓ Added: {customer.customer_name}")
+        else:
+            print(f"  ⚠️ Already exists: {customer.customer_name}")
+
+    db.session.commit()
+    print("✅ Customers added successfully!")
