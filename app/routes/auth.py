@@ -33,7 +33,7 @@ def Adminlogin():
         else:
             flash('Invalid username or password','danger')
             
-    return render_template('login.html',form = form)
+    return render_template('Admin_login.html',form = form)
 
 @auth_bp.route('/logout')
 def logout():
@@ -43,22 +43,6 @@ def logout():
 
 
 
-# # @auth_bp.route('/register',methods = ['GET','POST'])
-# # def register():
-# #     form = RegisterForm()
-# #     if form.validate_on_submit():
-# #         username = form.username.data
-# #         password = form.password.data
-# #         new_User = User(username = username,password = password)
-# #         db.session.add(new_User)
-# #         db.session.commit()
-        
-# #         flash('Registered Succesfully','success')
-            
-# #         return redirect(url_for('auth.login'))
-        
-            
-# #     return render_template('register.html',form = form)
        
 @auth_bp.route('/Employee/register', methods=['GET', 'POST'])
 def admin_register():
