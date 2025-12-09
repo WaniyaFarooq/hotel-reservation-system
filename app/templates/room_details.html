@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Room Details - Admin{% endblock %}
+
+{% block content %}
+<div class="register-container">
+  <h2>Room Details</h2>
+
+  <div style="margin-top:18px; overflow:auto;">
+    <table style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr style="text-align:left; border-bottom:1px solid #ddd;">
+          <th>Room No</th><th>Type</th><th>Price</th><th>Status</th><th>Floor</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for room in rooms %}
+        <tr style="border-bottom:1px solid #f1f1f1;">
+          <td>{{ room.roomID }}</td>
+          <td>{{ room.type }}</td>
+          <td>PKR {{ room.price }}</td>
+          <td>
+            {% if room.status == 'available' %}
+              <span style="color: green; font-weight: bold;">Available</span>
+            {% elif room.status == 'occupied' %}
+              <span style="color: red; font-weight: bold;">Occupied</span>
+            {% else %}
+              {{ room.status }}
+            {% endif %}
+          </td>
+          <td>Floor {{ room.roomID // 100 }}</td>
+          <td>
+            <a href="#" class="btn">Edit</a>
+            <a href="#" class="btn">Bookings</a>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6">No rooms configured.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BUTTONS - Table ke neeche, summary se pehle -->
+  <div style="margin-top:25px; text-align:center; padding-bottom:20px; border-bottom:2px solid #eee;">
+    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn" style="background: #ff9800;">← Back to Dashboard</a>
+    <a href="/add-room" class="btn" style="background: #4CAF50; margin-left: 15px;">➕ Add New Room</a>
+  </div>
+
+  <!-- Summary - Buttons ke neeche -->
+  <div style="margin-top:30px; padding:15px; background:#f8f9fa; border-radius:8px;">
+    <h3>Summary</h3>
+    <p>Total Rooms: {{ rooms|length }}</p>
+    <p>Available: {{ available }}</p>
+    <p>Occupied: {{ occupied }}</p>
+    <p>Other: {{ other }}</p>
+  </div>
+</div>
+{% endblock %}

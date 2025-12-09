@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Add Staff - Admin{% endblock %}
+
+{% block content %}
+<div class="register-container">
+  <h2>Add New Staff</h2>
+
+  <form method="post" action="{{ url_for('admin.add_staff') }}">  <!-- admin.add_staff -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    
+    <!-- Personal Details -->
+    <h3>Personal Details</h3>
+    <div class="form-group">
+      <label class="form-label">Full Name *</label>
+      <input class="form-control" name="name" placeholder="John Doe" required>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Email *</label>
+      <input class="form-control" type="email" name="email" placeholder="john@example.com" required>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Phone</label>
+      <input class="form-control" name="phone" placeholder="+92 3xx xxxxxxx">
+    </div>
+
+    <!-- Employment Details -->
+    <h3>Employment Details</h3>
+    <div class="form-group">
+      <label class="form-label">Designation/Role *</label>
+      <input class="form-control" name="designation" placeholder="Manager, Receptionist, etc." required>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Joining Date *</label>
+      <input class="form-control" type="date" name="joining_date" required>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Address</label>
+      <textarea class="form-control" name="address" placeholder="Full address"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Branch ID *</label>
+      <input class="form-control" type="number" name="branchID" value="1" required>
+      <small>Default is 1 (Main Branch)</small>
+    </div>
+
+    <!-- Admin Login Details -->
+    <h3>Admin Login Details</h3>
+    <div class="form-group">
+      <label class="form-label">Username *</label>
+      <input class="form-control" name="username" placeholder="johndoe" required>
+      <small>For admin login system</small>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Password *</label>
+      <input class="form-control" type="password" name="password" required>
+      <small>For admin login system</small>
+    </div>
+
+    <button class="btn-primary" type="submit">Add Staff Member</button>
+  </form>
+
+  <div style="margin-top:18px; text-align:center;">
+    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn">Back to Dashboard</a>
+    <a href="{{ url_for('admin.view_staff') }}" class="btn">View All Staff</a>
+  </div>
+</div>
+{% endblock %}

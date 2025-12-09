@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Add Room{% endblock %}
+
+{% block content %}
+<div class="register-container">
+    <h2>Add New Room</h2>
+    <form method="POST" action="{{ url_for('rooms.add_room') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="text" name="type" placeholder="Room Type (e.g., Deluxe)" required>
+        <input type="number" step="0.01" name="price" placeholder="Price per night" required>
+        <select name="status">
+            <option value="available">Available</option>
+            <option value="occupied">Occupied</option>
+            <option value="maintenance">Maintenance</option>
+        </select>
+        <input type="number" name="branchID" placeholder="Branch ID" value="1">
+        <button type="submit" class="btn">Add Room</button>
+    </form>
+    <div style="margin-top: 20px;">
+        <a href="{{ url_for('rooms.rooms') }}" class="btn">View All Rooms</a>
+    </div>
+</div>
+{% endblock %}

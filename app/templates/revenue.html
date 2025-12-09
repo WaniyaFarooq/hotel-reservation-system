@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Revenue - Admin{% endblock %}
+
+{% block content %}
+<div class="register-container">
+  <h2>Revenue Overview</h2>
+
+  <div style="display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-top:20px;">
+    <div class="feature-card" style="min-width:200px; text-align:left;">
+      <h3>Today's Revenue</h3>
+      <p style="font-size:1.6rem; font-weight:700;">PKR {{ today_revenue }}</p>
+    </div>
+
+    <div class="feature-card" style="min-width:200px; text-align:left;">
+      <h3>This Month</h3>
+      <p style="font-size:1.6rem; font-weight:700;">PKR {{ month_revenue }}</p>
+    </div>
+
+    <div class="feature-card" style="min-width:200px; text-align:left;">
+      <h3>Total Revenue</h3>
+      <p style="font-size:1.6rem; font-weight:700;">PKR {{ total_revenue }}</p>
+    </div>
+  </div>
+
+  <div style="margin-top:28px;">
+    <h3>Payment Transactions</h3>
+    <table style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr style="text-align:left; border-bottom:1px solid #ddd;">
+          <th>Payment ID</th><th>Customer ID</th><th>Booking ID</th><th>Amount</th><th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for payment in payments %}
+        <tr style="border-bottom:1px solid #f1f1f1;">
+          <td>{{ payment.paymentID }}</td>
+          <td>{{ payment.customerID }}</td>
+          <td>{{ payment.bookingID }}</td>
+          <td>PKR {{ payment.total_amount }}</td>
+          <td>{{ payment.payment_date }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" style="text-align:center; padding:20px; color:#666;">
+          No payment transactions yet. Payments will appear here when customers make bookings.
+        </td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:18px; text-align:center;">
+    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn">← Back to Dashboard</a>
+  </div>
+</div>
+{% endblock %}
