@@ -64,20 +64,7 @@ with app.app_context():
     
     # ====================
     # 5. USER ADD KARO
-    # ====================
-    user = User.query.filter_by(username="johndoe").first()
-    if not user:
-        user = User(username="johndoe")
-        user.set_password("password123")
-        db.session.add(user)
-        db.session.commit()
-        print("✅ User added")
-    else:
-        print("⚠️ User already exists")
-    
-    # ====================
-    # 6. 30 ROOMS ADD KARO - 5 FLOORS MEIN
-    # ====================
+ 
     rooms_data = [
         # --------- FLOOR 1: Standard Rooms (101-106) ---------
         (101, "Available", "Standard", 3000),
@@ -127,7 +114,7 @@ with app.app_context():
             room = Room(
                 roomID=r[0],
                 status=r[1],
-                type=r[2],
+                room_type=r[2],
                 price=r[3],
                 branchID=branch.branchID
             )

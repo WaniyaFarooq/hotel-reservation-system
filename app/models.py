@@ -204,11 +204,11 @@ class Payment(db.Model):
     __tablename__ = "payment"
 
     paymentID = db.Column(db.Integer, primary_key=True)
-    customerID = db.Column(db.Integer, db.ForeignKey("customer_login.customerID"))
-    bookingID = db.Column(db.Integer, db.ForeignKey("booking.bookID"))
-    servicesDetailID = db.Column(db.Integer, db.ForeignKey("services_detail.servicesDetailID"))
-    total_amount = db.Column(db.Float)
+    customerID = db.Column(db.Integer, db.ForeignKey("customer_login.customerID"), nullable=False)
+    bookingID = db.Column(db.Integer, db.ForeignKey("booking.bookID"), nullable=False)
+    servicesDetailID = db.Column(db.Integer, db.ForeignKey("services_detail.servicesDetailID"), nullable=True)  # <-- add this
     payment_date = db.Column(db.Date, default=datetime.utcnow)
-
-    def __repr__(self):
-        return f"<Payment {self.paymentID}>"
+    room_amount = db.Column(db.Float, nullable=False, default=0.0)
+    services_amount = db.Column(db.Float, nullable=False, default=0.0)
+    total_amount = db.Column(db.Float, nullable=False, default=0.0)
+    status = db.Column(db.String(20), default="Pending")

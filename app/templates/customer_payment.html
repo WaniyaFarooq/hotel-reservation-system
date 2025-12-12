@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+<h2>Payment for Booking #{{ booking.bookID }}</h2>
+
+<p>Room Charges: {{ room_amount }}</p>
+<p>Services Charges: {{ services_amount }}</p>
+<p><strong>Total Amount: {{ total_amount }}</strong></p>
+
+<form method="POST">
+    <button type="submit">Pay Now</button>
+</form>
+{% endblock %}

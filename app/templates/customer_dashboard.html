@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Customer Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome to your Dashboard</h2>
+
+<h3>Your Bookings</h3>
+<table border="1">
+    <tr>
+        <th>Booking ID</th>
+        <th>Check-In</th>
+        <th>Check-Out</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for b in bookings %}
+    <tr>
+        <td>{{ b.bookID }}</td>
+        <td>{{ b.checkIn }}</td>
+        <td>{{ b.checkOut }}</td>
+        <td>{{ b.status }}</td>
+        <td>
+            <a href="{{ url_for('customer.payment', booking_id=b.bookID) }}">Pay</a> |
+            <a href="{{ url_for('customer.cancel_booking', booking_id=b.bookID) }}">Cancel</a>
+        </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5">No bookings found.</td></tr>
+    {% endfor %}
+</table>
+
+<br>
+
+<h3>Payment History</h3>
+<table border="1">
+    <tr>
+        <th>Payment ID</th>
+        <th>Booking ID</th>
+        <th>Total Amount</th>
+        <th>Payment Date</th>
+    </tr>
+
+    {% for p in payments %}
+    <tr>
+        <td>{{ p.paymentID }}</td>
+        <td>{{ p.bookingID }}</td>
+        <td>{{ p.total_amount }}</td>
+        <td>{{ p.payment_date }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4">No payments found.</td></tr>
+    {% endfor %}
+</table>
+
+<br>
+<a href="{{ url_for('customer.book') }}">Book a Room</a>
+
+{% endblock %}

@@ -41,3 +41,12 @@ class CustomerRegistrationForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email(), Length(max=120)])
     password = PasswordField("Password", validators=[DataRequired(), Length(min=6)])
     submit = SubmitField("Register")
+    
+from wtforms import IntegerField
+
+class BookingForm(FlaskForm):
+    room_id = SelectField("Room", coerce=int, validators=[DataRequired()])
+    checkIn = DateField("Check-In Date", format="%Y-%m-%d", validators=[DataRequired()])
+    checkOut = DateField("Check-Out Date", format="%Y-%m-%d", validators=[DataRequired()])
+    guests = IntegerField("Number of Guests", validators=[DataRequired()])
+    submit = SubmitField("Book Now")

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Book a Room{% endblock %}
+
+{% block content %}
+
+<h2>Book a Room</h2>
+
+<form method="POST">
+    {{ form.hidden_tag() }}
+
+    <label>Select Room:</label><br>
+    {{ form.room_id(class="input") }}<br><br>
+
+    <label>Check-In Date:</label><br>
+    {{ form.checkIn(class="input") }}<br><br>
+
+    <label>Check-Out Date:</label><br>
+    {{ form.checkOut(class="input") }}<br><br>
+
+    <label>No. of Guests:</label><br>
+    {{ form.guests(class="input") }}<br><br>
+
+    {{ form.submit(class="btn btn-primary") }}
+</form>
+
+{% endblock %}

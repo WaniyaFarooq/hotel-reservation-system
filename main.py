@@ -1,7 +1,7 @@
 from app import create_app
 from app.extensions import db, csrf
 
-from app.models import User, Branch,Employees ,CustomerLogin,Services,Room,RoomDetail,ServicesDetail,Booking,Payment
+from app.models import  Branch,Employees ,CustomerLogin,Services,Room,RoomDetail,ServicesDetail,Booking,Payment
 
 app = create_app()
 
