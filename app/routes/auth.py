@@ -29,7 +29,7 @@ def Adminlogin():
 
             session['user_id'] = user.id   
             flash('Login Succesfully','success')
-            return redirect(url_for('home.html'))
+            return redirect(url_for('admin_dashboard.html'))
         else:
             flash('Invalid username or password','danger')
             
@@ -102,3 +102,22 @@ def admin_register():
         print("Form validation errors:", form.errors)
 
     return render_template("admin_register.html", form=form)
+
+# ---------------------------------------
+# CONTACT US PAGE - FOOTER BUTTON
+# ---------------------------------------
+@auth_bp.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+
+# ---------------------------------------
+# ABOUT US PAGE - FOOTER BUTTON
+# ---------------------------------------
+@auth_bp.route('/about')
+def about():
+    return render_template('about.html')
+
+@auth_bp.route('/Rooms')
+def Rooms():
+    return render_template('rooms.html')

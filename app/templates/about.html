@@ -1,0 +1,86 @@
+<!-- about.html -->
+{% extends 'base.html' %}
+
+{% block title %}About Us - Hotel WTM{% endblock %}
+
+{% block content %}
+<div class="about-container">
+    <!-- Hero Section -->
+    <section class="about-hero">
+        <div class="about-hero-content">
+            <h1>Our Story</h1>
+            <p>Discover the journey of Hotel WTM, where luxury meets comfort and every guest becomes family</p>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="about-mission">
+        <h2>Our Mission</h2>
+        <div class="mission-content">
+            <div class="mission-text">
+                <p>At Hotel WTM, our mission is simple: to provide exceptional hospitality experiences that exceed expectations. We believe that every guest deserves to feel special, valued, and completely at ease.</p>
+                <p>Founded in 2010, we've grown from a small family-run establishment to a premier destination, but our core values remain unchanged. We're committed to creating memorable stays through personalized service, luxurious amenities, and attention to every detail.</p>
+                <p>Our team works tirelessly to ensure that from the moment you arrive until your departure, you experience nothing but comfort, care, and convenience.</p>
+            </div>
+            <div class="mission-image">
+                <img src="/static/images/pexels-rebrand.jpg" 
+                alt="Hotel WTM Lobby">
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="about-values">
+        <h2>Our Core Values</h2>
+        <div class="values-grid">
+            <div class="value-card">
+                <div class="value-icon">💖</div>
+                <h3>Exceptional Service</h3>
+                <p>We go above and beyond to ensure every guest feels valued and cared for throughout their stay.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">✨</div>
+                <h3>Luxury & Comfort</h3>
+                <p>Combining modern luxury with home-like comfort to create the perfect relaxing environment.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🤝</div>
+                <h3>Integrity</h3>
+                <p>We believe in honest, transparent relationships with our guests, staff, and community.</p>
+            </div>
+            <div class="value-card">
+                <div class="value-icon">🌿</div>
+                <h3>Sustainability</h3>
+                <p>Committed to eco-friendly practices that protect our environment for future generations.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Timeline -->
+    <section class="about-story">
+        <h2>Our Journey</h2>
+        <div class="story-timeline">
+            <div class="timeline-item">
+                <span class="timeline-year">2010</span>
+                <h3>The Beginning</h3>
+                <p>Hotel WTM opened its doors with just 20 rooms and a dream to provide exceptional hospitality.</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2015</span>
+                <h3>First Expansion</h3>
+                <p>We expanded to 50 rooms and added our famous rooftop restaurant, becoming a city landmark.</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2020</span>
+                <h3>Luxury Renovation</h3>
+                <p>Complete renovation with state-of-the-art amenities and sustainable practices implementation.</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">2023</span>
+                <h3>Award Recognition</h3>
+                <p>Received the "Best Luxury Hotel" award for our exceptional service and guest satisfaction.</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -1,22 +1,194 @@
-<!-- rooms.html -->
+<!-- rooms_variety.html -->
 {% extends 'base.html' %}
-{% block title %}Rooms - HotelEase{% endblock %}
+
+{% block title %}Packages - Hotel WTM{% endblock %}
+
 {% block content %}
-<section class="rooms">
-<h2>Our Rooms</h2>
-<div class="room-list">
-<div class="room-card">
-<h3>Deluxe Room</h3>
-<p>Spacious and comfortable.</p>
-</div>
-<div class="room-card">
-<h3>Suite</h3>
-<p>Elegance at its finest.</p>
-</div>
-<div class="room-card">
-<h3>Standard Room</h3>
-<p>Affordable and cozy.</p>
-</div>
-</div>
+<!-- Hero Section -->
+<section class="rooms-hero">
+    <div class="rooms-hero-content">
+        <h1>Our Packages</h1>
+        <p>Experience luxury and comfort across five distinct room categories, each designed for a unique stay</p>
+    </div>
+</section>
+
+<!-- Room Packages Section -->
+<section class="room-packages">
+    <!-- Standard Room -->
+    <div class="room-package">
+        <div class="room-content">
+            <h2>Standard Room</h2>
+            <div class="room-price">PKR 3,000 / night</div>
+            <span class="room-status status-available">Most Rooms Available</span>
+            
+            <ul class="room-features">
+                <li>Comfortable Queen Size Bed</li>
+                <li>Private Bathroom with Essentials</li>
+                <li>Flat Screen TV with Cable</li>
+                <li>Free High-Speed WiFi</li>
+                <li>Working Desk Area</li>
+                <li>Room Service Available</li>
+            </ul>
+            
+            <div class="room-buttons">
+                <a href="{{ url_for('customer.book') }}" class="room-btn btn-primary">Book Now</a>
+                <a href="#" class="room-btn btn-secondary">View Details</a>
+            </div>
+        </div>
+        
+        <div class="room-image">
+            <img src="/static/images/linus-mimietz-p3UWyaujtQo-unsplash.jpg" alt="Standard Room">
+        </div>
+    </div>
+
+    <!-- Deluxe Room -->
+    <div class="room-package">
+        <div class="room-content">
+            <h2>Deluxe Room</h2>
+            <div class="room-price">PKR 5,000 / night</div>
+            <span class="room-status status-available">Good Availability</span>
+            
+            <ul class="room-features">
+                <li>King Size Bed with Premium Mattress</li>
+                <li>Spacious Bathroom with Bathtub</li>
+                <li>Smart TV with Streaming Services</li>
+                <li>Premium WiFi with Enhanced Speed</li>
+                <li>Mini Bar with Complimentary Water</li>
+                <li>Comfortable Seating Area</li>
+                <li>City View Windows</li>
+            </ul>
+            
+            <div class="room-buttons">
+                <a href="{{ url_for('customer.book') }}" class="room-btn btn-primary">Book Now</a>
+                <a href="#" class="room-btn btn-secondary">View Details</a>
+            </div>
+        </div>
+        
+        <div class="room-image">
+            <img src="/static/images/pexels-pixabay-210604.jpg" 
+                 alt="Deluxe Room">
+        </div>
+    </div>
+
+    <!-- Executive Room -->
+    <div class="room-package">
+        <div class="room-content">
+            <h2>Executive Room</h2>
+            <div class="room-price">PKR 7,000 / night</div>
+            <span class="room-status status-available">Limited Availability</span>
+            
+            <ul class="room-features">
+                <li>Super King Size Bed with Memory Foam</li>
+                <li>Luxury Bathroom with Jacuzzi</li>
+                <li>55" Smart TV with Home Theater</li>
+                <li>Dedicated Workstation with Printer</li>
+                <li>Complimentary Mini Bar</li>
+                <li>Separate Living Area</li>
+                <li>Panoramic City Views</li>
+                <li>Priority Check-in/Check-out</li>
+            </ul>
+            
+            <div class="room-buttons">
+                <a href="{{ url_for('customer.book') }}" class="room-btn btn-primary">Book Now</a>
+                <a href="#" class="room-btn btn-secondary">View Details</a>
+            </div>
+        </div>
+        
+        <div class="room-image">
+            <img src="static/images/point3d-commercial-imaging-ltd-5BV56SdvLmo-unsplash.jpg" 
+                 alt="Executive Room">
+        </div>
+    </div>
+
+    <!-- Suite -->
+    <div class="room-package">
+        <div class="room-content">
+            <h2>Suite</h2>
+            <div class="room-price">PKR 10,000 / night</div>
+            <span class="room-status status-available">Limited Availability</span>
+            
+            <ul class="room-features">
+                <li>Master Bedroom + Living Room</li>
+                <li>Marble Bathroom with Steam Shower</li>
+                <li>Multiple Smart TVs</li>
+                <li>Fully Stocked Premium Mini Bar</li>
+                <li>Private Balcony with Seating</li>
+                <li>Personal Butler Service</li>
+                <li>Complimentary Spa Access</li>
+                <li>Executive Lounge Access</li>
+            </ul>
+            
+            <div class="room-buttons">
+                <a href="{{ url_for('customer.book') }}" class="room-btn btn-primary">Book Now</a>
+                <a href="#" class="room-btn btn-secondary">View Details</a>
+            </div>
+        </div>
+        
+        <div class="room-image">
+            <img src="/static/images/round room.avif" 
+                 alt="Suite">
+        </div>
+    </div>
+
+    <!-- Presidential Suite -->
+    <div class="room-package">
+        <div class="room-content">
+            <h2>Presidential Suite</h2>
+            <div class="room-price">PKR 15,000 / night</div>
+            <span class="room-status status-available">Premium Availability</span>
+            
+            <ul class="room-features">
+                <li>3 Bedrooms + Living + Dining Area</li>
+                <li>Master Bathroom with Jacuzzi + Sauna</li>
+                <li>Home Theater System</li>
+                <li>Full Kitchen with Chef Service</li>
+                <li>Wraparound Terrace with City View</li>
+                <li>24/7 Dedicated Concierge</li>
+                <li>Limo Service Available</li>
+                <li>Private Check-in/Check-out</li>
+                <li>All Premium Amenities Included</li>
+            </ul>
+            
+            <div class="room-buttons">
+                <a href="{{ url_for('customer.book') }}" class="room-btn btn-primary">Book Now</a>
+                <a href="#" class="room-btn btn-secondary">View Details</a>
+            </div>
+        </div>
+        
+        <div class="room-image">
+            <img src="/static/images/big room.avif" 
+                 alt="Presidential Suite">
+        </div>
+    </div>
+</section>
+
+<!-- Highlights Section -->
+<section class="package-highlights">
+    <h2>Why Choose Our Rooms?</h2>
+    <div class="highlight-cards">
+        <div class="highlight-card">
+            <div class="highlight-icon">⭐</div>
+            <h3>Premium Quality</h3>
+            <p>All rooms feature premium furnishings, high-quality linens, and modern amenities for maximum comfort.</p>
+        </div>
+        
+        <div class="highlight-card">
+            <div class="highlight-icon">🔒</div>
+            <h3>Secure & Safe</h3>
+            <p>Advanced security systems, electronic key cards, and 24/7 surveillance ensure your safety and privacy.</p>
+        </div>
+        
+        <div class="highlight-card">
+            <div class="highlight-icon">🧹</div>
+            <h3>Daily Housekeeping</h3>
+            <p>Professional cleaning services ensure your room is always fresh, clean, and well-maintained.</p>
+        </div>
+        
+        <div class="highlight-card">
+            <div class="highlight-icon">🍽️</div>
+            <h3>Room Service</h3>
+            <p>24-hour room service offering a wide selection of local and international cuisine delivered to your room.</p>
+        </div>
+    </div>
 </section>
 {% endblock %}

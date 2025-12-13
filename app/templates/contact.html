@@ -1,15 +1,148 @@
 <!-- contact.html -->
 {% extends 'base.html' %}
-{% block title %}Contact - HotelEase{% endblock %}
+
+{% block title %}Contact Us - Hotel WTM{% endblock %}
+
 {% block content %}
-<section class="contact">
-<h2>Contact Us</h2>
-<form>
-<label>Name</label>
-<input type="text" required>
-<label>Message</label>
-<textarea required></textarea>
-<button class="btn" type="submit">Send</button>
-</form>
-</section>
+<div class="contact-container">
+    <div class="contact-header">
+        <h1>Get in Touch</h1>
+        <p class="subtitle">We're here to help and answer any questions you might have</p>
+    </div>
+
+    <div class="contact-content">
+        <!-- Left side: Contact Information & Image -->
+        <div class="contact-info">
+            <div class="contact-image">
+                <img src="/static/images/pexels-quark-studio-1159039-2507010.jpg" 
+                alt="Hotel WTM Lobby">
+                <div class="image-overlay">
+                    <h3>Welcome to Hotel WTM</h3>
+                    <p>Where comfort meets luxury</p>
+                </div>
+            </div>
+
+            <div class="contact-details">
+                <div class="detail-card">
+                    <div class="icon">📍</div>
+                    <div>
+                        <h3>Our Location</h3>
+                        <p>123 Luxury Street, Hospitality District</p>
+                        <p>Lahore, Punjab 400001</p>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="icon">📞</div>
+                    <div>
+                        <h3>Phone Numbers</h3>
+                        <p>Reservations: +92 22 1234 5678</p>
+                        <p>General Inquiries: +92 22 8765 4321</p>
+                        <p>24/7 Support: 1800-123-4567</p>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="icon">✉️</div>
+                    <div>
+                        <h3>Email Addresses</h3>
+                        <p>Bookings: reservations@hotelwtm.com</p>
+                        <p>Support: support@hotelwtm.com</p>
+                        <p>Events: events@hotelwtm.com</p>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <div class="icon">⏰</div>
+                    <div>
+                        <h3>Working Hours</h3>
+                        <p>Reception: 24/7</p>
+                        <p>Management: 9 AM - 7 PM (Mon-Sat)</p>
+                        <p>Check-in: 2 PM, Check-out: 12 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right side: Contact Form -->
+        <div class="contact-form-section">
+            <h2>Send us a Message</h2>
+            <form class="contact-form" method="POST" action="#">
+                <div class="form-group">
+                    <label for="name">Full Name *</label>
+                    <input type="text" id="name" name="name" required 
+                           placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email" required 
+                           placeholder="Enter your email address">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" 
+                           placeholder="Enter your phone number">
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Select a subject</option>
+                        <option value="booking">Booking Inquiry</option>
+                        <option value="reservation">Reservation Help</option>
+                        <option value="feedback">Feedback & Complaints</option>
+                        <option value="event">Event Planning</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Your Message *</label>
+                    <textarea id="message" name="message" rows="6" required 
+                              placeholder="Please describe your inquiry in detail..."></textarea>
+                </div>
+
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="newsletter" name="newsletter">
+                    <label for="newsletter">Subscribe to our newsletter for updates and offers</label>
+                </div>
+
+                <button type="button" class="submit-btn" id="sendBtn">
+                    <span class="btn-icon">📨</span>
+                    <span id="btnText">Send Message</span>
+                </button>
+
+                <script>
+                 document.getElementById('sendBtn').addEventListener('click', function() {
+                 const btn = this;
+                const btnText = document.getElementById('btnText');
+    
+               // Button disable kardo
+                   btn.disabled = true;
+                   btnText.textContent = 'Sending...';
+    
+                   // Fake loading delay
+                   setTimeout(function() {
+                       // Form clear
+                       document.querySelector('.contact-form').reset();
+        
+                       // Success message
+                       alert('✅ Your message has been sent successfully!');
+        
+                       // Button reset
+                       btn.disabled = false;
+                       btnText.textContent = 'Send Message';
+                   }, 1000); // 1 second delay
+               });
+               </script>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
