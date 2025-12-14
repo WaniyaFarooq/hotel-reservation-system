@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash,session
 from app.extensions import db
 from app.models import Employees, Room, CustomerLogin as Customer, Booking, Payment, Admin
 from datetime import datetime, date
@@ -10,8 +10,12 @@ admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 # ============================
 # ADMIN DASHBOARD
 # ============================
+
 @admin_bp.route("/dashboard")
 def admin_dashboard():
+    if 'user_id' not in session:
+        return redirect(url_for('auth.Adminlogin'))
+
     return render_template("admin_dashboard.html")
 
 # ============================
@@ -54,7 +58,7 @@ def add_staff():
             # Check if username already exists
             existing_admin = Admin.query.filter_by(username=username).first()
             if existing_admin:
-                flash(f'Username "{username}" already exists. Choose another.', 'danger')
+                flash(f'Username "{username}" already exists. Choose another.', 'warning')
                 return redirect(url_for("admin.add_staff"))
             
             # Create admin login
@@ -67,12 +71,12 @@ def add_staff():
             db.session.add(new_admin)
             db.session.commit()
             
-            flash(f'Staff member added successfully! Login: {username}', 'success')
+            flash(f'Staff member added successfully! ', 'success')
             return redirect(url_for("admin.view_staff"))
             
         except Exception as e:
             db.session.rollback()
-            flash(f'Error adding staff: {str(e)}', 'danger')
+            flash(f'Error adding staff: {str(e)}', 'error')
             return redirect(url_for("admin.add_staff"))
     
     # GET request - show form
@@ -104,42 +108,49 @@ def room_details():
 # ============================
 # REVENUE
 # ============================
-@admin_bp.route("/revenue")
+
+
+from app.forms.forms import RevenueFilterForm
+
+@admin_bp.route("/revenue", methods=["GET", "POST"])
 def revenue():
+    form = RevenueFilterForm()
     payments = Payment.query.all()
-    
+    filtered_payments = payments
+
+    start_date = None
+    end_date = None
+
+    if form.validate_on_submit():
+        start_date = form.start_date.data
+        end_date = form.end_date.data
+
+        # Filter payments based on the date range
+        if start_date and end_date:
+            filtered_payments = [p for p in payments if p.payment_date and start_date <= p.payment_date <= end_date]
+        elif start_date:
+            filtered_payments = [p for p in payments if p.payment_date and p.payment_date >= start_date]
+        elif end_date:
+            filtered_payments = [p for p in payments if p.payment_date and p.payment_date <= end_date]
+
     # Calculate totals
-    total_revenue = sum([p.total_amount for p in payments if p.total_amount])
-    
-    # Today's revenue - FIXED comparison
+    total_revenue = sum([p.total_amount for p in filtered_payments if p.total_amount])
     today = date.today()
-    today_revenue = sum([
-        p.total_amount for p in payments 
-        if p.total_amount and p.payment_date and p.payment_date == today
-    ])
-    
-    # This month's revenue
+    today_revenue = sum([p.total_amount for p in filtered_payments if p.payment_date == today])
     current_month = datetime.now().month
     current_year = datetime.now().year
     month_revenue = sum([
-        p.total_amount for p in payments 
-        if p.total_amount and p.payment_date and 
-        p.payment_date.month == current_month and 
-        p.payment_date.year == current_year
+        p.total_amount for p in filtered_payments
+        if p.payment_date and p.payment_date.month == current_month and p.payment_date.year == current_year
     ])
-    
-    # Debug print (temporarily)
-    print(f"DEBUG: Total payments: {len(payments)}")
-    print(f"DEBUG: Today's revenue: {today_revenue}")
-    print(f"DEBUG: Month revenue: {month_revenue}")
-    print(f"DEBUG: Total revenue: {total_revenue}")
-    
+
     return render_template(
         "revenue.html",
-        payments=payments,
+        payments=filtered_payments,
         total_revenue=total_revenue or 0,
         today_revenue=today_revenue or 0,
-        month_revenue=month_revenue or 0
+        month_revenue=month_revenue or 0,
+        form=form
     )
 
 @admin_bp.route("/customers")

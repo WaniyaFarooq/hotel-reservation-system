@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, session, request
-from app.forms.forms import CustomerLoginForm, CustomerRegistrationForm, BookingForm
+from app.forms.forms import CustomerLoginForm, CustomerRegistrationForm, BookingForm ,PaymentForm
 from app.models import CustomerLogin, Booking, Room, Payment, RoomDetail
 from app.extensions import db
 
@@ -21,7 +21,7 @@ def login():
             flash('Login successfully!', 'success')
             return redirect(url_for('customer.dashboard'))
 
-        flash('Invalid email or password', 'danger')
+        flash('Invalid email or password', 'error')
 
     return render_template('customer_login.html', form=form)
 
@@ -60,11 +60,12 @@ def register():
             db.session.add(new_customer)
             db.session.commit()
             flash("Customer registered successfully!", "success")
+            
             return redirect(url_for('customer.login'))
 
         except Exception as e:
             db.session.rollback()
-            flash(f"Error saving customer: {e}", "danger")
+            flash(f"Error saving customer: {e}", "error")
 
     return render_template("customer_register.html", form=form)
 
@@ -138,7 +139,7 @@ def cancel_booking(booking_id):
 
     # Ensure user can only cancel their own booking
     if booking.customerID != session["customer_id"]:
-        flash("Unauthorized action!", "danger")
+        flash("Unauthorized action!", "error")
         return redirect(url_for("customer.dashboard"))
 
     # Delete linked room details
@@ -154,40 +155,42 @@ def cancel_booking(booking_id):
 # ---------------------------------------
 # Make Payment
 # ---------------------------------------
+
+
 @customer_bp.route("/payment/<int:booking_id>", methods=["GET", "POST"])
 def payment(booking_id):
     if 'customer_id' not in session:
         return redirect(url_for('customer.login'))
 
     booking = Booking.query.get_or_404(booking_id)
-
-    # Calculate room charges
     room_detail = RoomDetail.query.filter_by(bookingID=booking_id).first()
     room_amount = room_detail.room.price if room_detail else 0
+    total_amount = room_amount
 
-    # Calculate services charges
-    services_details = room_detail.services_detail if room_detail else []
-    services_amount = sum(sd.total_price for sd in services_details)
+    form = PaymentForm()
 
-    total_amount = room_amount + services_amount
-
-    if request.method == "POST":
+    if form.validate_on_submit():
         new_payment = Payment(
             customerID=session["customer_id"],
             bookingID=booking.bookID,
             room_amount=room_amount,
-            services_amount=services_amount,
+            services_amount=0,
             total_amount=total_amount,
             status="Paid"
         )
         db.session.add(new_payment)
         db.session.commit()
+        booking.status = "Paid"  # or booking.status = "Paid" depending on your model
+        db.session.commit()
 
-        flash("Payment successful!", "success")
+        flash("Payment successful yippe!", "success")
         return redirect(url_for("customer.dashboard"))
 
-    return render_template("customer_payment.html",
-                           booking=booking,
-                           room_amount=room_amount,
-                           services_amount=services_amount,
-                           total_amount=total_amount)
+    return render_template(
+        "customer_payment.html",
+        booking=booking,
+        room_amount=room_amount,
+        services_amount=0,
+        total_amount=total_amount,
+        form=form
+    )

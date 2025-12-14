@@ -1,14 +1,38 @@
 {% extends "base.html" %}
+
 {% block title %}Payment{% endblock %}
 
 {% block content %}
-<h2>Payment for Booking #{{ booking.bookID }}</h2>
+<div class="container mx-auto px-4 py-8 flex justify-center">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Payment for Booking #{{ booking.bookID }}</h2>
 
-<p>Room Charges: {{ room_amount }}</p>
-<p>Services Charges: {{ services_amount }}</p>
-<p><strong>Total Amount: {{ total_amount }}</strong></p>
+        <!-- Charges Section -->
+        <div class="mb-6 space-y-3">
+            <div class="flex justify-between text-gray-700">
+                <span>Room Charges:</span>
+                <span>${{ "%.2f"|format(room_amount) }}</span>
+            </div>
+            <div class="flex justify-between text-gray-700">
+                <span>Services Charges:</span>
+                <span>${{ "%.2f"|format(services_amount) }}</span>
+            </div>
+            <div class="flex justify-between font-semibold text-gray-900 text-lg border-t pt-2 mt-2">
+                <span>Total Amount:</span>
+                <span>${{ "%.2f"|format(total_amount) }}</span>
+            </div>
+        </div>
 
-<form method="POST">
-    <button type="submit">Pay Now</button>
-</form>
+        <!-- Payment Form -->
+        <form method="POST" class="space-y-4">
+            {{ form.hidden_tag() }}
+            {{ form.submit(class_="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition") }}
+        </form>
+
+        <!-- Optional Back Button -->
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('customer.dashboard') }}" class="text-blue-500 hover:underline">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

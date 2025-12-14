@@ -3,58 +3,97 @@
 {% block title %}Customer Dashboard{% endblock %}
 
 {% block content %}
-<h2>Welcome to your Dashboard</h2>
+<div class="container mx-auto px-4 py-6">
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">Welcome to Your Dashboard</h1>
 
-<h3>Your Bookings</h3>
-<table border="1">
-    <tr>
-        <th>Booking ID</th>
-        <th>Check-In</th>
-        <th>Check-Out</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
+    <!-- Bookings Section -->
+    <section class="mb-10">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-700">Your Bookings</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded shadow">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-gray-600">Booking ID</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Check-In</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Check-Out</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Status</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for b in bookings %}
+                    <tr class="border-t">
+                        <td class="px-4 py-2">{{ b.bookID }}</td>
+                        <td class="px-4 py-2">{{ b.checkIn }}</td>
+                        <td class="px-4 py-2">{{ b.checkOut }}</td>
+                        <td class="px-4 py-2 booking-status">
+                            {{ b.status or 'Pending' }}
+                        </td>
+                        <td class="px-4 py-2 space-x-2">
+                            <a href="{{ url_for('customer.payment', booking_id=b.bookID) }}" class="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded pay-btn">Pay</a>
+                            <a href="{{ url_for('customer.cancel_booking', booking_id=b.bookID) }}" class="text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded">Cancel</a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="px-4 py-4 text-center text-gray-500">No bookings found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-    {% for b in bookings %}
-    <tr>
-        <td>{{ b.bookID }}</td>
-        <td>{{ b.checkIn }}</td>
-        <td>{{ b.checkOut }}</td>
-        <td>{{ b.status }}</td>
-        <td>
-            <a href="{{ url_for('customer.payment', booking_id=b.bookID) }}">Pay</a> |
-            <a href="{{ url_for('customer.cancel_booking', booking_id=b.bookID) }}">Cancel</a>
-        </td>
-    </tr>
-    {% else %}
-    <tr><td colspan="5">No bookings found.</td></tr>
-    {% endfor %}
-</table>
+    <!-- Payment History Section -->
+    <section class="mb-10">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-700">Payment History</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-200 rounded shadow">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-gray-600">Payment ID</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Booking ID</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Total Amount</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Payment Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr class="border-t">
+                        <td class="px-4 py-2">{{ p.paymentID }}</td>
+                        <td class="px-4 py-2">{{ p.bookingID }}</td>
+                        <td class="px-4 py-2">${{ "%.2f"|format(p.total_amount) }}</td>
+                        <td class="px-4 py-2">{{ p.payment_date.strftime('%Y-%m-%d') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="px-4 py-4 text-center text-gray-500">No payments found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-<br>
+    <!-- Book a Room Button -->
+    <div class="mt-6">
+        <a href="{{ url_for('customer.book') }}" class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded text-lg font-semibold">Book a Room</a>
+    </div>
+</div>
 
-<h3>Payment History</h3>
-<table border="1">
-    <tr>
-        <th>Payment ID</th>
-        <th>Booking ID</th>
-        <th>Total Amount</th>
-        <th>Payment Date</th>
-    </tr>
-
-    {% for p in payments %}
-    <tr>
-        <td>{{ p.paymentID }}</td>
-        <td>{{ p.bookingID }}</td>
-        <td>{{ p.total_amount }}</td>
-        <td>{{ p.payment_date }}</td>
-    </tr>
-    {% else %}
-    <tr><td colspan="4">No payments found.</td></tr>
-    {% endfor %}
-</table>
-
-<br>
-<a href="{{ url_for('customer.book') }}">Book a Room</a>
-
+<!-- JavaScript to hide Pay button if status is Paid -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const rows = document.querySelectorAll("tbody tr");
+    rows.forEach(row => {
+        const statusCell = row.querySelector(".booking-status");
+        const payBtn = row.querySelector(".pay-btn");
+        if (statusCell && payBtn) {
+            if (statusCell.textContent.trim() === "Paid") {
+                payBtn.style.display = "none"; // hide the pay button
+            }
+        }
+    });
+});
+</script>
 {% endblock %}

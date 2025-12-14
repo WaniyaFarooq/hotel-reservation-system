@@ -2,31 +2,50 @@
 {% block title %}Customer Registration - HotelEase{% endblock %}
 
 {% block content %}
-<div class="register-container">
-    <h2>Customer Registration</h2>
-    <form method="POST" action="{{ url_for('customer.register') }}"class="register-form">
-        {{ form.hidden_tag() }}
+<div class="container mx-auto px-4 py-8 flex justify-center">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Customer Registration</h2>
 
-        <div class="form-group">
-            {{ form.name.label(class="form-label") }}
-            {{ form.name(class="form-control") }}
-        </div>
+        <form method="POST" action="{{ url_for('customer.register') }}" class="space-y-4">
+            {{ form.hidden_tag() }}
 
-       
+            <!-- Name Field -->
+            <div>
+                <label class="block mb-1 font-medium text-gray-700">{{ form.name.label.text }}</label>
+                {{ form.name(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                {% for error in form.name.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-        <div class="form-group">
-            {{ form.email.label(class="form-label") }}
-            {{ form.email(class="form-control") }}
-        </div>
+            <!-- Email Field -->
+            <div>
+                <label class="block mb-1 font-medium text-gray-700">{{ form.email.label.text }}</label>
+                {{ form.email(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                {% for error in form.email.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
 
+            <!-- Password Field -->
+            <div>
+                <label class="block mb-1 font-medium text-gray-700">{{ form.password.label.text }}</label>
+                {{ form.password(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                {% for error in form.password.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
 
- 
-        <div class="form-group">
-            {{ form.password.label(class="form-label") }}
-            {{ form.password(class="form-control") }}
-        </div>
+            <!-- Submit Button -->
+            <div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition">Register</button>
+            </div>
 
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
+            <!-- Optional Login Link -->
+            <div class="text-center mt-2">
+                <a href="{{ url_for('customer.login') }}" class="text-blue-500 hover:underline text-sm">Already have an account? Login</a>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

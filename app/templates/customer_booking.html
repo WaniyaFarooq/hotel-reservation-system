@@ -3,25 +3,47 @@
 {% block title %}Book a Room{% endblock %}
 
 {% block content %}
+<div class="container mx-auto px-4 py-8 flex justify-center">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Book a Room</h2>
 
-<h2>Book a Room</h2>
+        <form method="POST" class="space-y-4">
+            {{ form.hidden_tag() }}
 
-<form method="POST">
-    {{ form.hidden_tag() }}
+            <!-- Room Selection -->
+            <div>
+                <label class="block mb-1 font-medium text-gray-700">Select Room:</label>
+                {{ form.room_id(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            </div>
 
-    <label>Select Room:</label><br>
-    {{ form.room_id(class="input") }}<br><br>
+            <!-- Check-In Date -->
+            <div>
+                <label class="block mb-1 font-medium text-gray-700">Check-In Date:</label>
+                {{ form.checkIn(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            </div>
 
-    <label>Check-In Date:</label><br>
-    {{ form.checkIn(class="input") }}<br><br>
+            <!-- Check-Out Date -->
+            <div>
+                <label class="block mb-1 font-medium text-gray-700">Check-Out Date:</label>
+                {{ form.checkOut(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            </div>
 
-    <label>Check-Out Date:</label><br>
-    {{ form.checkOut(class="input") }}<br><br>
+            <!-- Number of Guests -->
+            <div>
+                <label class="block mb-1 font-medium text-gray-700">No. of Guests:</label>
+                {{ form.guests(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+            </div>
 
-    <label>No. of Guests:</label><br>
-    {{ form.guests(class="input") }}<br><br>
+            <!-- Submit Button -->
+            <div>
+                {{ form.submit(class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition") }}
+            </div>
+        </form>
 
-    {{ form.submit(class="btn btn-primary") }}
-</form>
-
+        <!-- Optional Back Link -->
+        <div class="mt-4 text-center">
+            <a href="{{ url_for('customer.dashboard') }}" class="text-blue-500 hover:underline">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -50,3 +50,11 @@ class BookingForm(FlaskForm):
     checkOut = DateField("Check-Out Date", format="%Y-%m-%d", validators=[DataRequired()])
     guests = IntegerField("Number of Guests", validators=[DataRequired()])
     submit = SubmitField("Book Now")
+
+class PaymentForm(FlaskForm):
+    submit = SubmitField("Pay Now")
+    
+class RevenueFilterForm(FlaskForm):
+    start_date = DateField('Start Date', format='%Y-%m-%d', render_kw={"type": "date"})
+    end_date = DateField('End Date', format='%Y-%m-%d', render_kw={"type": "date"})
+    submit = SubmitField('Filter')

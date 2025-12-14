@@ -1,37 +1,52 @@
 {% extends "base.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Admin Login{% endblock %}
+
+{% block navbar %}
+<header class="navbar simple-navbar">
+    <div class="logo">Hotel WTM</div>
+    <nav>
+        <a href="{{ url_for('auth.home') }}">Home</a>
+         <a href="{{ url_for('auth.admin_register') }}">AdminRegister</a>
+        <a href="{{ url_for('auth.Adminlogin') }}">AdminLogin</a>
+        <a href="{{url_for('admin.admin_dashboard')}}">AdminDashboard</a>
+
+    </nav>
+</header>
+
+{% endblock %}
 
 {% block content %}
+<div class="container mx-auto px-4 py-8 flex justify-center">
+    <div class="w-full max-w-sm bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Admin Login</h2>
 
-<h2>Login</h2>
+        <form method="POST" action="{{ url_for('auth.Adminlogin') }}" class="space-y-4">
+            {{ form.hidden_tag() }}
 
-<form method="POST" action="{{ url_for('auth.Adminlogin') }}" class="login-form">
+            <!-- Username Field -->
+            <div>
+                <label class="block mb-1 font-medium text-gray-700">{{ form.username.label.text }}</label>
+                {{ form.username(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                {% for error in form.username.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-    {{ form.hidden_tag() }}
+            <!-- Password Field -->
+            <div>
+                <label class="block mb-1 font-medium text-gray-700">{{ form.password.label.text }}</label>
+                {{ form.password(class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                {% for error in form.password.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-    <div>
-        {{ form.username.label }}
-        {{ form.username(class="input-field") }}
-
-        {% for error in form.username.errors %}
-           <p class="error">{{ error }}</p>
-        {% endfor %}
+            <!-- Submit Button -->
+            <div>
+                {{ form.submit(class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition") }}
+            </div>
+        </form>
     </div>
-
-    <div>
-        {{ form.password.label }}
-        {{ form.password(class="input-field") }}
-
-        {% for error in form.password.errors %}
-            <p class="error">{{ error }}</p>
-        {% endfor %}
-    </div>
-
-    <div>
-        {{ form.submit(class="submit-btn") }}
-    </div>
-
-</form>
-
+</div>
 {% endblock %}
