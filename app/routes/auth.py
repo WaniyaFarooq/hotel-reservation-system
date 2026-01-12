@@ -52,10 +52,10 @@ def logout():
 @auth_bp.route('/register', methods=['GET', 'POST'])
 def admin_register():
 
-    # Simple login protection (NO route name changes)
-    if 'user_id' not in session:
-        flash('Please login first', 'warning')
-        return redirect(url_for('auth.Adminlogin'))
+    # # Simple login protection (NO route name changes)
+    # if 'user_id' not in session:
+    #     flash('Please login first', 'warning')
+    #     return redirect(url_for('auth.Adminlogin'))
 
     form = EmployeeRegistrationForm()
 
